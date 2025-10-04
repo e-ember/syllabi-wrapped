@@ -6,9 +6,41 @@ const fs = require('fs');
 const axios = require('axios');
 const pdfParse = require('pdf-parse');
 const cors = require('cors');
+const sqlite3 = require('sqlite3').verbose();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Initialize SQLite database
+const db = new sqlite3.Database('syllabi.db', (err) => {
+    if (err) {
+        console.error('Error opening database:', err.message);
+    } else {
+        console.log('Connected to SQLite database');
+        // Create tables if they don't exist
+        db.run(`
+            CREATE TABLE IF NOT EXISTS classes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                class_name TEXT NOT NULL,
+                instructor TEXT,
+                semester TEXT,
+                credits INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        
+        db.run(`
+            CREATE TABLE IF NOT EXISTS syllabus_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                class_id INTEGER,
+                data_type TEXT NOT NULL,
+                data_content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (class_id) REFERENCES classes (id)
+            )
+        `);
+    }
+});
 
 // Middleware
 app.use(cors());
@@ -211,13 +243,23 @@ app.post('/api/process-syllabi', upload.array('files', 10), async (req, res) => 
             }
         }
 
+        // Save processed data to database
+        const savedClasses = [];
+        for (const result of results) {
+            const classId = await saveClassToDatabase(result);
+            if (classId) {
+                savedClasses.push(classId);
+            }
+        }
+        
         // Generate wrapped data
         const wrappedData = generateWrappedData(results);
         
         res.json({
             success: true,
             data: wrappedData,
-            processedFiles: results.length
+            processedFiles: results.length,
+            savedClasses: savedClasses
         });
 
     } catch (error) {
@@ -228,6 +270,58 @@ app.post('/api/process-syllabi', upload.array('files', 10), async (req, res) => 
         });
     }
 });
+
+// Save class data to database
+function saveClassToDatabase(syllabusData) {
+    return new Promise((resolve, reject) => {
+        const courseInfo = syllabusData.courseInfo || {};
+        
+        // Insert class
+        db.run(
+            `INSERT INTO classes (class_name, instructor, semester, credits) VALUES (?, ?, ?, ?)`,
+            [
+                courseInfo.title || 'Unknown Course',
+                courseInfo.instructor || 'Unknown Instructor',
+                courseInfo.semester || 'Unknown Semester',
+                courseInfo.credits || 0
+            ],
+            function(err) {
+                if (err) {
+                    console.error('Error saving class:', err);
+                    reject(err);
+                    return;
+                }
+                
+                const classId = this.lastID;
+                
+                // Save each data type separately
+                const dataTypes = ['gradeWeights', 'importantDates', 'policies', 'courseStats'];
+                let completed = 0;
+                
+                dataTypes.forEach(dataType => {
+                    if (syllabusData[dataType]) {
+                        db.run(
+                            `INSERT INTO syllabus_data (class_id, data_type, data_content) VALUES (?, ?, ?)`,
+                            [classId, dataType, JSON.stringify(syllabusData[dataType])],
+                            (err) => {
+                                if (err) console.error(`Error saving ${dataType}:`, err);
+                                completed++;
+                                if (completed === dataTypes.length) {
+                                    resolve(classId);
+                                }
+                            }
+                        );
+                    } else {
+                        completed++;
+                        if (completed === dataTypes.length) {
+                            resolve(classId);
+                        }
+                    }
+                });
+            }
+        );
+    });
+}
 
 // Generate wrapped data from processed syllabi
 function generateWrappedData(syllabi) {
@@ -405,6 +499,69 @@ function combineCourseStats(stats) {
         stats: allStats
     };
 }
+
+// Get all saved classes
+app.get('/api/classes', (req, res) => {
+    db.all(`
+        SELECT c.*, 
+               COUNT(sd.id) as data_count
+        FROM classes c
+        LEFT JOIN syllabus_data sd ON c.id = sd.class_id
+        GROUP BY c.id
+        ORDER BY c.created_at DESC
+    `, (err, rows) => {
+        if (err) {
+            console.error('Error fetching classes:', err);
+            return res.status(500).json({ error: 'Failed to fetch classes' });
+        }
+        res.json({ classes: rows });
+    });
+});
+
+// Get specific class data
+app.get('/api/classes/:id', (req, res) => {
+    const classId = req.params.id;
+    
+    // Get class info
+    db.get('SELECT * FROM classes WHERE id = ?', [classId], (err, classRow) => {
+        if (err) {
+            console.error('Error fetching class:', err);
+            return res.status(500).json({ error: 'Failed to fetch class' });
+        }
+        
+        if (!classRow) {
+            return res.status(404).json({ error: 'Class not found' });
+        }
+        
+        // Get syllabus data
+        db.all('SELECT * FROM syllabus_data WHERE class_id = ?', [classId], (err, dataRows) => {
+            if (err) {
+                console.error('Error fetching class data:', err);
+                return res.status(500).json({ error: 'Failed to fetch class data' });
+            }
+            
+            // Reconstruct the syllabus data
+            const syllabusData = {
+                courseInfo: {
+                    title: classRow.class_name,
+                    instructor: classRow.instructor,
+                    semester: classRow.semester,
+                    credits: classRow.credits
+                }
+            };
+            
+            dataRows.forEach(row => {
+                try {
+                    syllabusData[row.data_type] = JSON.parse(row.data_content);
+                } catch (parseErr) {
+                    console.error(`Error parsing ${row.data_type}:`, parseErr);
+                }
+            });
+            
+            res.json({ class: classRow, syllabusData });
+        });
+    });
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

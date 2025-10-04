@@ -7,7 +7,6 @@ let currentClassData = null;
 
 // DOM elements
 const uploadArea = document.getElementById('uploadArea');
-const fileInput = document.getElementById('fileInput');
 const uploadAreaResults = document.getElementById('uploadAreaResults');
 const fileInputResults = document.getElementById('fileInputResults');
 const loadingSection = document.getElementById('loadingSection');
@@ -40,7 +39,6 @@ function loadDemoData() {
 
 function setupEventListeners() {
     // File input change
-    fileInput.addEventListener('change', handleFileSelect);
     fileInputResults.addEventListener('change', handleFileSelect);
     
     // Drag and drop for both upload areas
@@ -67,7 +65,9 @@ function setupEventListeners() {
 
 // File handling functions
 function handleFileSelect(event) {
+    console.log('File selected!', event.target.files);
     const files = Array.from(event.target.files);
+    console.log('Files to process:', files);
     processFiles(files);
 }
 
@@ -90,9 +90,14 @@ function handleDrop(event) {
 }
 
 function processFiles(files) {
-    if (files.length === 0) return;
+    console.log('processFiles called with:', files);
+    if (files.length === 0) {
+        console.log('No files to process');
+        return;
+    }
     
     uploadedFiles = files;
+    console.log('Showing loading...');
     showLoading();
     
     // Try to process with ChatGPT API, fallback to demo data
@@ -363,11 +368,11 @@ function generateClassHTML(classData, index) {
     `;
 }
 
-function openSlideshowModal(classId) {
+async function openSlideshowModal(classId) {
     currentSlideIndex = 0;
     
     // Get class data based on ID
-    const classData = getClassData(classId);
+    const classData = await getClassData(classId);
     currentClassData = classData;
     
     modalTitle.textContent = `${classData.className} Wrapped`;
@@ -376,7 +381,63 @@ function openSlideshowModal(classId) {
     setupSlideshowNavigation();
 }
 
-function getClassData(classId) {
+async function getClassData(classId) {
+    try {
+        // Try to get real data from database first
+        const response = await fetch(`http://localhost:3000/api/classes/${classId}`);
+        if (response.ok) {
+            const data = await response.json();
+            const classData = data.class;
+            const syllabusData = data.syllabusData;
+            
+            // Convert database data to slideshow format
+            const slides = [];
+            
+            if (syllabusData.gradeWeights) {
+                slides.push({
+                    title: 'Grade Weights Wrapped',
+                    type: 'grades',
+                    data: syllabusData.gradeWeights
+                });
+            }
+            
+            if (syllabusData.importantDates) {
+                slides.push({
+                    title: 'Important Dates Wrapped',
+                    type: 'dates',
+                    data: syllabusData.importantDates
+                });
+            }
+            
+            if (syllabusData.policies) {
+                slides.push({
+                    title: 'Policies Wrapped',
+                    type: 'policies',
+                    data: syllabusData.policies
+                });
+            }
+            
+            if (syllabusData.courseStats) {
+                slides.push({
+                    title: 'Course Stats Wrapped',
+                    type: 'stats',
+                    data: syllabusData.courseStats
+                });
+            }
+            
+            return {
+                className: classData.class_name,
+                classCode: classData.class_name,
+                instructor: classData.instructor,
+                semester: classData.semester,
+                slides: slides
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching class data from database:', error);
+    }
+    
+    // Fallback to demo data if database fetch fails
     const classDataMap = {
         'cs101': {
             className: 'Computer Science 101',
@@ -826,7 +887,7 @@ async function processSyllabiWithChatGPT(files) {
     });
     
     try {
-        const response = await fetch('/api/process-syllabi', {
+        const response = await fetch('http://localhost:3000/api/process-syllabi', {
             method: 'POST',
             body: formData
         });
@@ -923,6 +984,63 @@ function getDemoData() {
     };
 }
 
+// Load classes from database
+async function loadClassesFromDatabase() {
+    try {
+        const response = await fetch('http://localhost:3000/api/classes');
+        if (response.ok) {
+            const data = await response.json();
+            const classes = data.classes;
+            
+            if (classes.length > 0) {
+                // Update the results section with real classes
+                const resultsSection = document.getElementById('resultsSection');
+                const classesGrid = document.getElementById('classesGrid');
+                
+                if (resultsSection && classesGrid) {
+                    resultsSection.style.display = 'block';
+                    classesGrid.innerHTML = '';
+                    
+                    classes.forEach((classItem, index) => {
+                        const classRectangle = document.createElement('div');
+                        classRectangle.className = 'class-rectangle';
+                        classRectangle.onclick = () => openSlideshowModal(classItem.id);
+                        
+                        classRectangle.innerHTML = `
+                            <div class="class-title">${classItem.class_name}</div>
+                            <div class="class-subtitle">${classItem.instructor} • ${classItem.semester}</div>
+                            <div class="class-preview">
+                                <div class="preview-stat">
+                                    <span class="preview-number">${classItem.data_count || 0}</span>
+                                    <div class="preview-label">Data Points</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">${classItem.credits || 0}</span>
+                                    <div class="preview-label">Credits</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">${new Date(classItem.created_at).toLocaleDateString()}</span>
+                                    <div class="preview-label">Added</div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        classesGrid.appendChild(classRectangle);
+                    });
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading classes from database:', error);
+    }
+}
+
+// Load classes on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Try to load real classes from database
+    loadClassesFromDatabase();
+});
+
 // Export functions for potential backend integration
 window.SyllabiWrapped = {
     processFiles,
@@ -930,5 +1048,6 @@ window.SyllabiWrapped = {
     openSlideshowModal,
     closeSlideshowModal,
     navigateSlides,
-    goToSlide
+    goToSlide,
+    loadClassesFromDatabase
 };
