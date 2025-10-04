@@ -10,59 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">Syllabi Wrapped</h1>
-            <p class="hero-subtitle">Transform your boring syllabi into beautiful, organized summaries</p>
-            <div class="upload-container">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">📄</div>
-                    <h3>Upload Your Syllabi</h3>
-                    <p>Drag and drop PDF files or click to browse</p>
-                    <input type="file" id="fileInput" multiple accept=".pdf" hidden>
-                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                        Choose Files
-                    </button>
-                    <button class="demo-btn" onclick="loadDemoData()">
-                        Try Demo Data
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="hero-visual">
-            <div class="floating-card card-1" onclick="openSlideshowModal('cs101')">
-                <div class="card-content">
-                    <h4>Computer Science 101</h4>
-                    <p class="card-description">CS 101 • Dr. Smith</p>
-                    <div class="mini-stats">
-                        <span class="stat">15 Assignments</span>
-                        <span class="stat">4 Slides</span>
-                    </div>
-                </div>
-            </div>
-            <div class="floating-card card-2" onclick="openSlideshowModal('math201')">
-                <div class="card-content">
-                    <h4>Mathematics 201</h4>
-                    <p class="card-description">MATH 201 • Prof. Johnson</p>
-                    <div class="mini-stats">
-                        <span class="stat">20 Assignments</span>
-                        <span class="stat">3 Slides</span>
-                    </div>
-                </div>
-            </div>
-            <div class="floating-card card-3" onclick="openSlideshowModal('phys150')">
-                <div class="card-content">
-                    <h4>Physics 150</h4>
-                    <p class="card-description">PHYS 150 • Dr. Williams</p>
-                    <div class="mini-stats">
-                        <span class="stat">18 Assignments</span>
-                        <span class="stat">3 Slides</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Loading Section -->
     <div class="loading-section" id="loadingSection" style="display: none;">
@@ -74,68 +21,105 @@
     </div>
 
     <!-- Results Section -->
-    <div class="results-section" id="resultsSection" style="display: none;">
+    <div class="results-section" id="resultsSection">
         <div class="results-header">
-            <h2>Your Syllabi Wrapped</h2>
-            <p>Click on a class to see its personalized wrap-up</p>
+            <h2>Syllabi Wrapped</h2>
         </div>
         
-        <!-- Classes Grid -->
-        <div class="classes-grid" id="classesGrid">
-            <!-- Static class rectangles -->
-            <div class="class-rectangle" onclick="openSlideshowModal('cs101')">
-                <div class="class-title">Computer Science 101</div>
-                <div class="class-subtitle">CS 101 • Dr. Smith • Spring 2024</div>
-                <div class="class-preview">
-                    <div class="preview-stat">
-                        <span class="preview-number">4</span>
-                        <div class="preview-label">Slides</div>
-                    </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">15</span>
-                        <div class="preview-label">Assignments</div>
-                    </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">4</span>
-                        <div class="preview-label">Deadlines</div>
+        <!-- Main Content Container -->
+        <div class="main-content-container">
+            <!-- Left Side - Upload Section -->
+            <div class="upload-section">
+                <div class="upload-container">
+                    <div class="upload-area" id="uploadAreaResults">
+                        <div class="upload-icon">📄</div>
+                        <h3>Upload Your Syllabi</h3>
+                        <p>Drag and drop PDF files or click to browse</p>
+                        <input type="file" id="fileInputResults" multiple accept=".pdf" hidden>
+                        <button class="upload-btn" onclick="document.getElementById('fileInputResults').click()">
+                            Upload
+                        </button>
+                        <button class="demo-btn" onclick="loadDemoData()">
+                            Try Demo Data
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="class-rectangle" onclick="openSlideshowModal('math201')">
-                <div class="class-title">Mathematics 201</div>
-                <div class="class-subtitle">MATH 201 • Prof. Johnson • Spring 2024</div>
-                <div class="class-preview">
-                    <div class="preview-stat">
-                        <span class="preview-number">3</span>
-                        <div class="preview-label">Slides</div>
+            <!-- Right Side - Classes List -->
+            <div class="classes-section">
+                <!-- <div class="classes-header">
+                    <h3>Your Syllabi Wrapped</h3>
+                    <p>Click on a class to see its personalized wrap-up</p>
+                </div> -->
+                
+                <!-- Classes Grid -->
+                <div class="classes-grid" id="classesGrid">
+                    <!-- Static class rectangles -->
+                    <div class="class-rectangle" onclick="openSlideshowModal('cs101')">
+                        <div class="class-number">1</div>
+                        <div class="class-content">
+                            <div class="class-title">Computer Science 101</div>
+                            <div class="class-subtitle">CS 101 • Dr. Smith • Spring 2024</div>
+                            <div class="class-preview">
+                                <div class="preview-stat">
+                                    <span class="preview-number">4</span>
+                                    <div class="preview-label">Slides</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">15</span>
+                                    <div class="preview-label">Assignments</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">4</span>
+                                    <div class="preview-label">Deadlines</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">20</span>
-                        <div class="preview-label">Assignments</div>
+                    
+                    <div class="class-rectangle" onclick="openSlideshowModal('math201')">
+                        <div class="class-number">2</div>
+                        <div class="class-content">
+                            <div class="class-title">Mathematics 201</div>
+                            <div class="class-subtitle">MATH 201 • Prof. Johnson • Spring 2024</div>
+                            <div class="class-preview">
+                                <div class="preview-stat">
+                                    <span class="preview-number">3</span>
+                                    <div class="preview-label">Slides</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">20</span>
+                                    <div class="preview-label">Assignments</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">6</span>
+                                    <div class="preview-label">Deadlines</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">6</span>
-                        <div class="preview-label">Deadlines</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="class-rectangle" onclick="openSlideshowModal('phys150')">
-                <div class="class-title">Physics 150</div>
-                <div class="class-subtitle">PHYS 150 • Dr. Williams • Spring 2024</div>
-                <div class="class-preview">
-                    <div class="preview-stat">
-                        <span class="preview-number">3</span>
-                        <div class="preview-label">Slides</div>
-                    </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">18</span>
-                        <div class="preview-label">Assignments</div>
-                    </div>
-                    <div class="preview-stat">
-                        <span class="preview-number">3</span>
-                        <div class="preview-label">Deadlines</div>
+                    
+                    <div class="class-rectangle" onclick="openSlideshowModal('phys150')">
+                        <div class="class-number">3</div>
+                        <div class="class-content">
+                            <div class="class-title">Physics 150</div>
+                            <div class="class-subtitle">PHYS 150 • Dr. Williams • Spring 2024</div>
+                            <div class="class-preview">
+                                <div class="preview-stat">
+                                    <span class="preview-number">3</span>
+                                    <div class="preview-label">Slides</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">18</span>
+                                    <div class="preview-label">Assignments</div>
+                                </div>
+                                <div class="preview-stat">
+                                    <span class="preview-number">3</span>
+                                    <div class="preview-label">Deadlines</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

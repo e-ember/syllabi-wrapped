@@ -8,6 +8,8 @@ let currentClassData = null;
 // DOM elements
 const uploadArea = document.getElementById('uploadArea');
 const fileInput = document.getElementById('fileInput');
+const uploadAreaResults = document.getElementById('uploadAreaResults');
+const fileInputResults = document.getElementById('fileInputResults');
 const loadingSection = document.getElementById('loadingSection');
 const resultsSection = document.getElementById('resultsSection');
 const uploadMoreSection = document.getElementById('uploadMoreSection');
@@ -39,11 +41,16 @@ function loadDemoData() {
 function setupEventListeners() {
     // File input change
     fileInput.addEventListener('change', handleFileSelect);
+    fileInputResults.addEventListener('change', handleFileSelect);
     
-    // Drag and drop
+    // Drag and drop for both upload areas
     uploadArea.addEventListener('dragover', handleDragOver);
     uploadArea.addEventListener('dragleave', handleDragLeave);
     uploadArea.addEventListener('drop', handleDrop);
+    
+    uploadAreaResults.addEventListener('dragover', handleDragOver);
+    uploadAreaResults.addEventListener('dragleave', handleDragLeave);
+    uploadAreaResults.addEventListener('drop', handleDrop);
     
     // Modal controls
     closeModal.addEventListener('click', closeSlideshowModal);
@@ -66,17 +73,17 @@ function handleFileSelect(event) {
 
 function handleDragOver(event) {
     event.preventDefault();
-    uploadArea.classList.add('dragover');
+    event.target.closest('.upload-area').classList.add('dragover');
 }
 
 function handleDragLeave(event) {
     event.preventDefault();
-    uploadArea.classList.add('dragover');
+    event.target.closest('.upload-area').classList.remove('dragover');
 }
 
 function handleDrop(event) {
     event.preventDefault();
-    uploadArea.classList.remove('dragover');
+    event.target.closest('.upload-area').classList.remove('dragover');
     const files = Array.from(event.dataTransfer.files);
     const pdfFiles = files.filter(file => file.type === 'application/pdf');
     processFiles(pdfFiles);
@@ -102,7 +109,7 @@ function processFiles(files) {
 }
 
 function showLoading() {
-    document.querySelector('.hero-section').style.display = 'none';
+    resultsSection.style.display = 'none';
     loadingSection.style.display = 'flex';
 }
 
@@ -322,32 +329,35 @@ function generateClasses() {
     syllabiData.forEach((classData, index) => {
         const classRectangle = document.createElement('div');
         classRectangle.className = 'class-rectangle fade-in';
-        classRectangle.innerHTML = generateClassHTML(classData);
+        classRectangle.innerHTML = generateClassHTML(classData, index);
         classRectangle.addEventListener('click', () => openSlideshowModal(classData));
         classesGrid.appendChild(classRectangle);
     });
 }
 
-function generateClassHTML(classData) {
+function generateClassHTML(classData, index) {
     const totalSlides = classData.slides.length;
     const totalAssignments = classData.slides.find(s => s.type === 'grades')?.data?.totalAssignments || 0;
     const upcomingDeadlines = classData.slides.find(s => s.type === 'dates')?.data?.upcomingDeadlines || 0;
     
     return `
-        <div class="class-title">${classData.className}</div>
-        <div class="class-subtitle">${classData.classCode} • ${classData.instructor} • ${classData.semester}</div>
-        <div class="class-preview">
-            <div class="preview-stat">
-                <span class="preview-number">${totalSlides}</span>
-                <div class="preview-label">Slides</div>
-            </div>
-            <div class="preview-stat">
-                <span class="preview-number">${totalAssignments}</span>
-                <div class="preview-label">Assignments</div>
-            </div>
-            <div class="preview-stat">
-                <span class="preview-number">${upcomingDeadlines}</span>
-                <div class="preview-label">Deadlines</div>
+        <div class="class-number">${index + 1}</div>
+        <div class="class-content">
+            <div class="class-title">${classData.className}</div>
+            <div class="class-subtitle">${classData.classCode} • ${classData.instructor} • ${classData.semester}</div>
+            <div class="class-preview">
+                <div class="preview-stat">
+                    <span class="preview-number">${totalSlides}</span>
+                    <div class="preview-label">Slides</div>
+                </div>
+                <div class="preview-stat">
+                    <span class="preview-number">${totalAssignments}</span>
+                    <div class="preview-label">Assignments</div>
+                </div>
+                <div class="preview-stat">
+                    <span class="preview-number">${upcomingDeadlines}</span>
+                    <div class="preview-label">Deadlines</div>
+                </div>
             </div>
         </div>
     `;
@@ -792,14 +802,20 @@ function resetUpload() {
     uploadedFiles = [];
     currentClassData = null;
     
-    // Hide results and show hero
+    // Hide results and show loading
     resultsSection.style.display = 'none';
     uploadMoreSection.style.display = 'none';
     slideshowModal.style.display = 'none';
-    document.querySelector('.hero-section').style.display = 'flex';
+    loadingSection.style.display = 'flex';
     
-    // Reset file input
+    // Reset file inputs
     fileInput.value = '';
+    fileInputResults.value = '';
+    
+    // Show results after a brief moment
+    setTimeout(() => {
+        showResults();
+    }, 500);
 }
 
 // ChatGPT API Integration
