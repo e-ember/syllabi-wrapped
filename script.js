@@ -451,72 +451,54 @@ async function getClassData(classId) {
             semester: 'Spring 2024',
             slides: [
                 {
-                    title: 'Grade Weights Wrapped',
-                    type: 'grades',
+                    title: 'Grade Weights',
+                    type: 'gradeWeights',
                     data: {
-                        totalAssignments: 15,
-                        examWeight: 45,
-                        homeworkWeight: 35,
-                        participationWeight: 15,
-                        projectWeight: 5,
-                        topCategories: [
-                            { name: 'Midterm Exam', weight: 25, color: '#ff6b6b' },
-                            { name: 'Final Exam', weight: 20, color: '#4ecdc4' },
-                            { name: 'Homework', weight: 35, color: '#45b7d1' },
-                            { name: 'Participation', weight: 15, color: '#96ceb4' },
-                            { name: 'Final Project', weight: 5, color: '#feca57' }
+                        gradeBreakdown: [
+                            { name: 'Midterm Exam', weight: 30 },
+                            { name: 'Final Exam', weight: 40 },
+                            { name: 'Homework', weight: 20 },
+                            { name: 'Participation', weight: 10 }
                         ]
                     }
                 },
                 {
-                    title: 'Important Dates Wrapped',
-                    type: 'dates',
+                    title: 'Important Dates',
+                    type: 'importantDates',
                     data: {
-                        totalDates: 12,
-                        upcomingDeadlines: 4,
-                        examCount: 3,
-                        assignmentCount: 8,
                         importantDates: [
-                            { name: 'Midterm Exam', date: 'March 15, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Final Project Due', date: 'May 20, 2024', type: 'assignment', priority: 'high' },
-                            { name: 'Final Exam', date: 'June 10, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Homework 5', date: 'April 5, 2024', type: 'assignment', priority: 'medium' },
-                            { name: 'Quiz 3', date: 'April 12, 2024', type: 'quiz', priority: 'medium' }
+                            { name: 'Midterm Exam', date: 'March 15, 2024' },
+                            { name: 'Final Exam', date: 'June 10, 2024' },
+                            { name: 'Final Project Due', date: 'May 20, 2024' },
+                            { name: 'Programming Assignment 3', date: 'April 5, 2024' }
                         ]
                     }
                 },
                 {
-                    title: 'Policies Wrapped',
-                    type: 'policies',
+                    title: 'Homework & Attendance',
+                    type: 'homeworkAttendance',
                     data: {
-                        totalPolicies: 8,
-                        latePolicy: '10% deduction per day late, maximum 3 days',
-                        attendanceRequired: true,
-                        plagiarismPolicy: 'Zero tolerance - automatic failure',
-                        policies: [
-                            { name: 'Late Policy', description: '10% deduction per day late, maximum 3 days', severity: 'moderate' },
-                            { name: 'Attendance', description: 'Required - 3 absences max before grade penalty', severity: 'high' },
-                            { name: 'Plagiarism', description: 'Zero tolerance policy - automatic failure', severity: 'critical' },
-                            { name: 'Makeup Exams', description: 'Only with valid medical excuse and prior approval', severity: 'moderate' },
-                            { name: 'Grade Appeals', description: 'Must be submitted within 1 week of grade posting', severity: 'low' }
-                        ]
+                        homeworkPolicy: 'Weekly programming assignments due every Friday at 11:59 PM',
+                        lateWorkPolicy: '10% deduction per day late, maximum 3 days late accepted',
+                        attendancePolicy: 'Attendance required - 3 absences max before grade penalty'
                     }
                 },
                 {
-                    title: 'Course Stats Wrapped',
-                    type: 'stats',
+                    title: 'Office Hours & Contact',
+                    type: 'officeHours',
                     data: {
-                        totalCredits: 4,
-                        totalHours: 120,
-                        averageWorkload: '8-12 hours/week',
-                        difficulty: 'Intermediate',
-                        stats: [
-                            { name: 'Total Credits', value: 4, unit: 'units' },
-                            { name: 'Lecture Hours', value: 3, unit: 'hours/week' },
-                            { name: 'Lab Hours', value: 2, unit: 'hours/week' },
-                            { name: 'Expected Study Time', value: 6, unit: 'hours/week' },
-                            { name: 'Prerequisites', value: 2, unit: 'courses' }
-                        ]
+                        taOfficeHours: 'TA Office Hours: Mon/Wed 2-4 PM, Fri 10-12 PM in CS Lab',
+                        discussionSections: 'Discussion Sections: Tue/Thu 3-4 PM in Room 101',
+                        contactInfo: 'TA Email: cs101-ta@university.edu, Office: CS Building Room 205'
+                    }
+                },
+                {
+                    title: 'Academic Honesty',
+                    type: 'plagiarismPolicy',
+                    data: {
+                        plagiarismPolicy: 'Zero tolerance for plagiarism - automatic course failure',
+                        academicIntegrity: 'All work must be your own. Collaboration on homework is allowed but code sharing is prohibited',
+                        consequences: 'First offense: Course failure. Second offense: Academic probation'
                     }
                 }
             ]
@@ -528,56 +510,54 @@ async function getClassData(classId) {
             semester: 'Spring 2024',
             slides: [
                 {
-                    title: 'Grade Weights Wrapped',
-                    type: 'grades',
+                    title: 'Grade Weights',
+                    type: 'gradeWeights',
                     data: {
-                        totalAssignments: 20,
-                        examWeight: 60,
-                        homeworkWeight: 25,
-                        participationWeight: 10,
-                        projectWeight: 5,
-                        topCategories: [
-                            { name: 'Midterm 1', weight: 20, color: '#ff6b6b' },
-                            { name: 'Midterm 2', weight: 20, color: '#4ecdc4' },
-                            { name: 'Final Exam', weight: 20, color: '#45b7d1' },
-                            { name: 'Homework', weight: 25, color: '#96ceb4' },
-                            { name: 'Participation', weight: 10, color: '#feca57' },
-                            { name: 'Final Project', weight: 5, color: '#ff9ff3' }
+                        gradeBreakdown: [
+                            { name: 'Midterm 1', weight: 25 },
+                            { name: 'Midterm 2', weight: 25 },
+                            { name: 'Final Exam', weight: 30 },
+                            { name: 'Homework', weight: 20 }
                         ]
                     }
                 },
                 {
-                    title: 'Important Dates Wrapped',
-                    type: 'dates',
+                    title: 'Important Dates',
+                    type: 'importantDates',
                     data: {
-                        totalDates: 15,
-                        upcomingDeadlines: 6,
-                        examCount: 3,
-                        assignmentCount: 12,
                         importantDates: [
-                            { name: 'Midterm 1', date: 'February 28, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Midterm 2', date: 'April 10, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Final Exam', date: 'May 25, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Problem Set 8', date: 'March 15, 2024', type: 'assignment', priority: 'medium' },
-                            { name: 'Problem Set 12', date: 'April 20, 2024', type: 'assignment', priority: 'medium' }
+                            { name: 'Midterm 1', date: 'February 28, 2024' },
+                            { name: 'Midterm 2', date: 'April 10, 2024' },
+                            { name: 'Final Exam', date: 'May 25, 2024' },
+                            { name: 'Problem Set 8 Due', date: 'March 15, 2024' }
                         ]
                     }
                 },
                 {
-                    title: 'Policies Wrapped',
-                    type: 'policies',
+                    title: 'Homework & Attendance',
+                    type: 'homeworkAttendance',
                     data: {
-                        totalPolicies: 6,
-                        latePolicy: 'No late homework accepted',
-                        attendanceRequired: false,
-                        plagiarismPolicy: 'Academic integrity violation',
-                        policies: [
-                            { name: 'Late Policy', description: 'No late homework accepted - submit early', severity: 'critical' },
-                            { name: 'Attendance', description: 'Not required but highly recommended', severity: 'low' },
-                            { name: 'Plagiarism', description: 'Academic integrity violation - report to dean', severity: 'critical' },
-                            { name: 'Calculator Policy', description: 'Scientific calculator allowed on exams only', severity: 'moderate' },
-                            { name: 'Office Hours', description: 'Mon/Wed/Fri 2-4 PM, or by appointment', severity: 'low' }
-                        ]
+                        homeworkPolicy: 'Weekly problem sets due every Monday at 5:00 PM',
+                        lateWorkPolicy: 'No late homework accepted - submit early to avoid issues',
+                        attendancePolicy: 'Attendance not required but highly recommended for success'
+                    }
+                },
+                {
+                    title: 'Office Hours & Contact',
+                    type: 'officeHours',
+                    data: {
+                        taOfficeHours: 'TA Office Hours: Mon/Wed/Fri 2-4 PM in Math Lab',
+                        discussionSections: 'Discussion Sections: Tue/Thu 4-5 PM in Room 203',
+                        contactInfo: 'TA Email: math201-ta@university.edu, Office: Math Building Room 150'
+                    }
+                },
+                {
+                    title: 'Academic Honesty',
+                    type: 'plagiarismPolicy',
+                    data: {
+                        plagiarismPolicy: 'Academic integrity violation - automatic report to dean',
+                        academicIntegrity: 'All work must be your own. Collaboration on problem sets is allowed but copying solutions is prohibited',
+                        consequences: 'First offense: Academic probation. Second offense: Suspension'
                     }
                 }
             ]
@@ -589,54 +569,54 @@ async function getClassData(classId) {
             semester: 'Spring 2024',
             slides: [
                 {
-                    title: 'Grade Weights Wrapped',
-                    type: 'grades',
+                    title: 'Grade Weights',
+                    type: 'gradeWeights',
                     data: {
-                        totalAssignments: 18,
-                        examWeight: 50,
-                        homeworkWeight: 30,
-                        labWeight: 15,
-                        participationWeight: 5,
-                        topCategories: [
-                            { name: 'Midterm Exam', weight: 25, color: '#ff6b6b' },
-                            { name: 'Final Exam', weight: 25, color: '#4ecdc4' },
-                            { name: 'Homework', weight: 30, color: '#45b7d1' },
-                            { name: 'Lab Reports', weight: 15, color: '#96ceb4' },
-                            { name: 'Participation', weight: 5, color: '#feca57' }
+                        gradeBreakdown: [
+                            { name: 'Midterm Exam', weight: 25 },
+                            { name: 'Final Exam', weight: 25 },
+                            { name: 'Homework', weight: 30 },
+                            { name: 'Lab Reports', weight: 20 }
                         ]
                     }
                 },
                 {
-                    title: 'Important Dates Wrapped',
-                    type: 'dates',
+                    title: 'Important Dates',
+                    type: 'importantDates',
                     data: {
-                        totalDates: 10,
-                        upcomingDeadlines: 3,
-                        examCount: 2,
-                        assignmentCount: 6,
                         importantDates: [
-                            { name: 'Midterm Exam', date: 'March 22, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Final Exam', date: 'June 5, 2024', type: 'exam', priority: 'high' },
-                            { name: 'Lab Report 4', date: 'April 8, 2024', type: 'assignment', priority: 'medium' },
-                            { name: 'Homework 6', date: 'April 15, 2024', type: 'assignment', priority: 'medium' }
+                            { name: 'Midterm Exam', date: 'March 22, 2024' },
+                            { name: 'Final Exam', date: 'June 5, 2024' },
+                            { name: 'Lab Report 4 Due', date: 'April 8, 2024' },
+                            { name: 'Homework 6 Due', date: 'April 15, 2024' }
                         ]
                     }
                 },
                 {
-                    title: 'Policies Wrapped',
-                    type: 'policies',
+                    title: 'Homework & Attendance',
+                    type: 'homeworkAttendance',
                     data: {
-                        totalPolicies: 7,
-                        latePolicy: '5% deduction per day, maximum 1 week',
-                        attendanceRequired: true,
-                        plagiarismPolicy: 'Zero tolerance',
-                        policies: [
-                            { name: 'Late Policy', description: '5% deduction per day, maximum 1 week late', severity: 'moderate' },
-                            { name: 'Attendance', description: 'Required - 2 absences max', severity: 'high' },
-                            { name: 'Lab Safety', description: 'Safety glasses required in all labs', severity: 'critical' },
-                            { name: 'Plagiarism', description: 'Zero tolerance - automatic course failure', severity: 'critical' },
-                            { name: 'Makeup Labs', description: 'Must be completed within 1 week', severity: 'moderate' }
-                        ]
+                        homeworkPolicy: 'Weekly physics problems due every Wednesday at 11:59 PM',
+                        lateWorkPolicy: '5% deduction per day late, maximum 1 week late accepted',
+                        attendancePolicy: 'Attendance required - 2 absences max before grade penalty'
+                    }
+                },
+                {
+                    title: 'Office Hours & Contact',
+                    type: 'officeHours',
+                    data: {
+                        taOfficeHours: 'TA Office Hours: Tue/Thu 1-3 PM in Physics Lab',
+                        discussionSections: 'Discussion Sections: Mon/Wed 2-3 PM in Room 301',
+                        contactInfo: 'TA Email: phys150-ta@university.edu, Office: Physics Building Room 120'
+                    }
+                },
+                {
+                    title: 'Academic Honesty',
+                    type: 'plagiarismPolicy',
+                    data: {
+                        plagiarismPolicy: 'Zero tolerance for plagiarism - automatic course failure',
+                        academicIntegrity: 'All work must be your own. Lab reports must be individual work',
+                        consequences: 'First offense: Course failure. Second offense: Academic probation'
                     }
                 }
             ]
@@ -678,36 +658,33 @@ function generateSlides() {
 
 function generateSlideHTML(slide) {
     switch (slide.type) {
-        case 'grades':
-            return generateGradesSlide(slide);
-        case 'dates':
-            return generateDatesSlide(slide);
-        case 'policies':
-            return generatePoliciesSlide(slide);
-        case 'stats':
-            return generateStatsSlide(slide);
+        case 'gradeWeights':
+            return generateGradeWeightsSlide(slide);
+        case 'importantDates':
+            return generateImportantDatesSlide(slide);
+        case 'homeworkAttendance':
+            return generateHomeworkAttendanceSlide(slide);
+        case 'officeHours':
+            return generateOfficeHoursSlide(slide);
+        case 'plagiarismPolicy':
+            return generatePlagiarismPolicySlide(slide);
         default:
             return generateDefaultSlide(slide);
     }
 }
 
-function generateGradesSlide(slide) {
+function generateGradeWeightsSlide(slide) {
     return `
         <div class="slide-title">Grade Weights</div>
         <div class="slide-content">
             <div class="slide-stat">
-                <div class="slide-label">Total Assignments</div>
-                <div class="slide-big-number">${slide.data.totalAssignments}</div>
-                <div class="slide-description">across all categories</div>
-            </div>
-            <div class="slide-stat">
-                <div class="slide-label">Top Categories</div>
+                <div class="slide-label">Grade Breakdown</div>
                 <div class="ranking-list">
-                    ${slide.data.topCategories.slice(0, 3).map((category, index) => `
+                    ${slide.data.gradeBreakdown.map((item, index) => `
                         <div class="ranking-item">
                             <div class="ranking-number">${index + 1}</div>
-                            <div class="ranking-text">${category.name}</div>
-                            <div class="ranking-value">${category.weight}%</div>
+                            <div class="ranking-text">${item.name}</div>
+                            <div class="ranking-value">${item.weight}%</div>
                         </div>
                     `).join('')}
                 </div>
@@ -716,19 +693,14 @@ function generateGradesSlide(slide) {
     `;
 }
 
-function generateDatesSlide(slide) {
+function generateImportantDatesSlide(slide) {
     return `
         <div class="slide-title">Important Dates</div>
         <div class="slide-content">
             <div class="slide-stat">
-                <div class="slide-label">Upcoming Deadlines</div>
-                <div class="slide-big-number">${slide.data.upcomingDeadlines}</div>
-                <div class="slide-description">in the next 30 days</div>
-            </div>
-            <div class="slide-stat">
-                <div class="slide-label">Top Deadlines</div>
+                <div class="slide-label">Key Dates</div>
                 <div class="ranking-list">
-                    ${slide.data.importantDates.slice(0, 3).map((date, index) => `
+                    ${slide.data.importantDates.map((date, index) => `
                         <div class="ranking-item">
                             <div class="ranking-number">${index + 1}</div>
                             <div class="ranking-text">${date.name}</div>
@@ -741,44 +713,61 @@ function generateDatesSlide(slide) {
     `;
 }
 
-function generatePoliciesSlide(slide) {
+function generateHomeworkAttendanceSlide(slide) {
     return `
-        <div class="slide-title">Policies</div>
+        <div class="slide-title">Homework & Attendance</div>
         <div class="slide-content">
             <div class="slide-stat">
-                <div class="slide-label">Total Policies</div>
-                <div class="slide-big-number">${slide.data.totalPolicies}</div>
-                <div class="slide-description">key policies to remember</div>
+                <div class="slide-label">Homework Policy</div>
+                <div class="slide-description">${slide.data.homeworkPolicy}</div>
             </div>
             <div class="slide-stat">
-                <div class="slide-label">Critical Policies</div>
-                <div class="ranking-list">
-                    ${slide.data.policies.slice(0, 3).map((policy, index) => `
-                        <div class="ranking-item">
-                            <div class="ranking-number">${index + 1}</div>
-                            <div class="ranking-text">${policy.name}</div>
-                            <div class="ranking-value">${policy.severity}</div>
-                        </div>
-                    `).join('')}
-                </div>
+                <div class="slide-label">Late Work Policy</div>
+                <div class="slide-description">${slide.data.lateWorkPolicy}</div>
+            </div>
+            <div class="slide-stat">
+                <div class="slide-label">Attendance Policy</div>
+                <div class="slide-description">${slide.data.attendancePolicy}</div>
             </div>
         </div>
     `;
 }
 
-function generateStatsSlide(slide) {
+function generateOfficeHoursSlide(slide) {
     return `
-        <div class="slide-title">Course Stats</div>
+        <div class="slide-title">Office Hours & Contact</div>
         <div class="slide-content">
             <div class="slide-stat">
-                <div class="slide-label">Total Credits</div>
-                <div class="slide-big-number">${slide.data.totalCredits}</div>
-                <div class="slide-description">credit hours</div>
+                <div class="slide-label">TA Office Hours</div>
+                <div class="slide-description">${slide.data.taOfficeHours}</div>
             </div>
             <div class="slide-stat">
-                <div class="slide-label">Expected Workload</div>
-                <div class="slide-big-number">${slide.data.averageWorkload}</div>
-                <div class="slide-description">per week</div>
+                <div class="slide-label">Discussion Sections</div>
+                <div class="slide-description">${slide.data.discussionSections}</div>
+            </div>
+            <div class="slide-stat">
+                <div class="slide-label">Contact Information</div>
+                <div class="slide-description">${slide.data.contactInfo}</div>
+            </div>
+        </div>
+    `;
+}
+
+function generatePlagiarismPolicySlide(slide) {
+    return `
+        <div class="slide-title">Academic Honesty</div>
+        <div class="slide-content">
+            <div class="slide-stat">
+                <div class="slide-label">Plagiarism Policy</div>
+                <div class="slide-description">${slide.data.plagiarismPolicy}</div>
+            </div>
+            <div class="slide-stat">
+                <div class="slide-label">Academic Integrity</div>
+                <div class="slide-description">${slide.data.academicIntegrity}</div>
+            </div>
+            <div class="slide-stat">
+                <div class="slide-label">Consequences</div>
+                <div class="slide-description">${slide.data.consequences}</div>
             </div>
         </div>
     `;
@@ -1086,3 +1075,4 @@ window.SyllabiWrapped = {
     goToSlide,
     loadClassesFromDatabase
 };
+

@@ -567,20 +567,24 @@ body {
 }
 
 /* Different background colors for different slide types - Instagram Story Style */
-.slide.grades::before {
+.slide.gradeWeights::before {
     background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 50%, #ffa8a8 100%);
 }
 
-.slide.dates::before {
+.slide.importantDates::before {
     background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 50%, #093637 100%);
 }
 
-.slide.policies::before {
+.slide.homeworkAttendance::before {
     background: linear-gradient(135deg, #feca57 0%, #ff9ff3 50%, #54a0ff 100%);
 }
 
-.slide.stats::before {
+.slide.officeHours::before {
     background: linear-gradient(135deg, #5f27cd 0%, #00d2d3 50%, #ff9ff3 100%);
+}
+
+.slide.plagiarismPolicy::before {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #8e44ad 100%);
 }
 
 .slide-title {
