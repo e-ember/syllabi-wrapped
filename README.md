@@ -1,6 +1,7 @@
 # 🎓 Syllabi Wrapped
 
-> A Spotify Wrapped–inspired way to explore your course syllabi — fun, fast, and frustration-free!
+> Solving one of the biggest problems college students all face during Week 0, a Spotify Wrapped–inspired way to explore all your courses' syllabi — fun, fast, and frustration-free!
+<img width="1844" height="939" alt="Screenshot 2025-10-04 154527" src="https://github.com/user-attachments/assets/614921db-cc0f-4f0c-a010-4bc7c4cccf06" />
 
 ## 🌟 Overview
 
