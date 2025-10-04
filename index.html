@@ -128,22 +128,29 @@
 
     <!-- Individual Class Slideshow Modal -->
     <div class="slideshow-modal" id="slideshowModal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Class Slideshow</h2>
-                <button class="close-btn" id="closeModal">×</button>
+        <div class="story-container">
+            <!-- Progress Bar -->
+            <div class="story-progress-bar" id="storyProgressBar">
+                <!-- Progress segments will be dynamically generated here -->
             </div>
             
-            <!-- Slideshow Navigation -->
-            <div class="slideshow-navigation">
-                <button class="slide-btn prev-slide" id="prevSlide">‹</button>
-                <div class="slide-indicators" id="slideIndicators"></div>
-                <button class="slide-btn next-slide" id="nextSlide">›</button>
+            <!-- Story Header -->
+            <div class="story-header">
+                <div class="story-logo">📚</div>
+                <div class="story-title" id="modalTitle">Class Slideshow</div>
+                <button class="story-close-btn" id="closeModal">×</button>
             </div>
-
-            <!-- Slides Container -->
-            <div class="slides-container" id="slidesContainer">
-                <!-- Individual slides will be dynamically generated here -->
+            
+            <!-- Story Content -->
+            <div class="story-content">
+                <!-- Navigation Areas -->
+                <div class="story-nav-left" id="prevSlide"></div>
+                <div class="story-nav-right" id="nextSlide"></div>
+                
+                <!-- Slides Container -->
+                <div class="slides-container" id="slidesContainer">
+                    <!-- Individual slides will be dynamically generated here -->
+                </div>
             </div>
         </div>
     </div>

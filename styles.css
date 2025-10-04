@@ -401,138 +401,159 @@ body {
     font-weight: 500;
 }
 
-/* Slideshow Modal */
+/* Slideshow Modal - Instagram Story Style */
 .slideshow-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: #000;
     z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(10px);
 }
 
-.modal-content {
-    background: white;
-    border-radius: 30px;
-    width: 90%;
+.story-container {
+    width: 100%;
+    height: 100%;
     max-width: 400px;
-    height: 85%;
     max-height: 800px;
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-    margin: 0 auto;
+    background: #000;
+    display: flex;
+    flex-direction: column;
 }
 
-.modal-header {
+/* Progress Bar */
+.story-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
     display: flex;
-    justify-content: space-between;
+    gap: 2px;
+    padding: 8px 16px;
+    z-index: 10;
+}
+
+.progress-segment {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    transition: background 0.3s ease;
+}
+
+.progress-segment.active {
+    background: white;
+}
+
+.progress-segment.completed {
+    background: white;
+}
+
+/* Story Header */
+.story-header {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
     align-items: center;
-    padding: 1.5rem 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 10;
+}
+
+.story-logo {
+    font-size: 1.5rem;
     color: white;
 }
 
-.modal-header h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin: 0;
+.story-title {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+    margin: 0 16px;
 }
 
-.close-btn {
+.story-close-btn {
     background: none;
     border: none;
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    padding: 0;
-    width: 40px;
-    height: 40px;
+    padding: 8px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    z-index: 20;
+    position: relative;
 }
 
-.close-btn:hover {
+.story-close-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: scale(1.1);
 }
 
-/* Slideshow Navigation */
-.slideshow-navigation {
+/* Story Content */
+.story-content {
+    position: relative;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 2rem;
-    background: rgba(0, 0, 0, 0.05);
-    gap: 1rem;
+    overflow: hidden;
 }
 
-.slide-btn {
-    background: rgba(102, 126, 234, 0.8);
-    border: none;
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.2rem;
+/* Navigation Areas */
+.story-nav-left,
+.story-nav-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 5;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.slide-btn:hover {
-    background: rgba(102, 126, 234, 1);
-    transform: scale(1.1);
+.story-nav-left {
+    left: 0;
 }
 
-.slide-indicators {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.slide-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(102, 126, 234, 0.3);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.slide-indicator.active {
-    background: rgba(102, 126, 234, 1);
-    transform: scale(1.2);
+.story-nav-right {
+    right: 0;
 }
 
 /* Slides Container */
 .slides-container {
     display: flex;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    height: calc(100% - 120px);
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
 }
 
 .slide {
     min-width: 100%;
-    padding: 2rem 1.5rem;
+    height: 100%;
+    padding: 100px 2rem 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     text-align: center;
     position: relative;
-    overflow: hidden;
-    min-height: 100%;
+    overflow-y: auto;
 }
 
 .slide::before {
@@ -545,13 +566,13 @@ body {
     z-index: -1;
 }
 
-/* Different background colors for different slide types */
+/* Different background colors for different slide types - Instagram Story Style */
 .slide.grades::before {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a8edea 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 50%, #ffa8a8 100%);
 }
 
 .slide.dates::before {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #d299c2 100%);
+    background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 50%, #093637 100%);
 }
 
 .slide.policies::before {
@@ -563,12 +584,13 @@ body {
 }
 
 .slide-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: white;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
     z-index: 2;
+    line-height: 1.2;
 }
 
 .slide-content {
@@ -576,17 +598,18 @@ body {
     flex-direction: column;
     gap: 1.5rem;
     width: 100%;
-    max-width: 320px;
+    max-width: 350px;
     z-index: 2;
+    margin-top: 1rem;
 }
 
 .slide-stat {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
     padding: 1.5rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .slide-big-number {
@@ -601,24 +624,26 @@ body {
 
 .slide-label {
     font-size: 1.1rem;
-    color: #666;
+    color: white;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .slide-description {
     font-size: 0.9rem;
-    color: #888;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .ranking-item {
     display: flex;
     align-items: center;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
     margin-bottom: 0.5rem;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .ranking-number {

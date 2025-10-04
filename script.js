@@ -57,10 +57,6 @@ function setupEventListeners() {
             closeSlideshowModal();
         }
     });
-    
-    // Slideshow navigation
-    prevSlide.addEventListener('click', () => navigateSlides(-1));
-    nextSlide.addEventListener('click', () => navigateSlides(1));
 }
 
 // File handling functions
@@ -375,10 +371,19 @@ async function openSlideshowModal(classId) {
     const classData = await getClassData(classId);
     currentClassData = classData;
     
+    // Update modal title
     modalTitle.textContent = `${classData.className} Wrapped`;
+    
+    // Show modal
     slideshowModal.style.display = 'flex';
+    
+    // Generate slides
     generateSlides();
-    setupSlideshowNavigation();
+    
+    // Set up navigation after a brief delay to ensure DOM is ready
+    setTimeout(() => {
+        setupSlideshowNavigation();
+    }, 100);
 }
 
 async function getClassData(classId) {
@@ -649,7 +654,10 @@ function closeSlideshowModal() {
 
 function generateSlides() {
     slidesContainer.innerHTML = '';
-    slideIndicators.innerHTML = '';
+    
+    // Generate progress bar segments
+    const progressBar = document.getElementById('storyProgressBar');
+    progressBar.innerHTML = '';
     
     currentClassData.slides.forEach((slide, index) => {
         // Create slide
@@ -658,12 +666,14 @@ function generateSlides() {
         slideElement.innerHTML = generateSlideHTML(slide);
         slidesContainer.appendChild(slideElement);
         
-        // Create indicator
-        const indicator = document.createElement('div');
-        indicator.className = `slide-indicator ${index === 0 ? 'active' : ''}`;
-        indicator.addEventListener('click', () => goToSlide(index));
-        slideIndicators.appendChild(indicator);
+        // Create progress segment
+        const progressSegment = document.createElement('div');
+        progressSegment.className = `progress-segment ${index === 0 ? 'active' : ''}`;
+        progressBar.appendChild(progressSegment);
     });
+    
+    // Update slides container position
+    updateSlidesPosition();
 }
 
 function generateSlideHTML(slide) {
@@ -683,7 +693,7 @@ function generateSlideHTML(slide) {
 
 function generateGradesSlide(slide) {
     return `
-        <div class="slide-title">${slide.title}</div>
+        <div class="slide-title">Grade Weights</div>
         <div class="slide-content">
             <div class="slide-stat">
                 <div class="slide-label">Total Assignments</div>
@@ -693,7 +703,7 @@ function generateGradesSlide(slide) {
             <div class="slide-stat">
                 <div class="slide-label">Top Categories</div>
                 <div class="ranking-list">
-                    ${slide.data.topCategories.slice(0, 5).map((category, index) => `
+                    ${slide.data.topCategories.slice(0, 3).map((category, index) => `
                         <div class="ranking-item">
                             <div class="ranking-number">${index + 1}</div>
                             <div class="ranking-text">${category.name}</div>
@@ -702,28 +712,18 @@ function generateGradesSlide(slide) {
                     `).join('')}
                 </div>
             </div>
-            <div class="slide-stat">
-                <div class="slide-label">Exam Weight</div>
-                <div class="slide-big-number">${slide.data.examWeight}%</div>
-                <div class="slide-description">of total grade</div>
-            </div>
         </div>
     `;
 }
 
 function generateDatesSlide(slide) {
     return `
-        <div class="slide-title">${slide.title}</div>
+        <div class="slide-title">Important Dates</div>
         <div class="slide-content">
             <div class="slide-stat">
                 <div class="slide-label">Upcoming Deadlines</div>
                 <div class="slide-big-number">${slide.data.upcomingDeadlines}</div>
                 <div class="slide-description">in the next 30 days</div>
-            </div>
-            <div class="slide-stat">
-                <div class="slide-label">Total Important Dates</div>
-                <div class="slide-big-number">${slide.data.totalDates}</div>
-                <div class="slide-description">throughout the semester</div>
             </div>
             <div class="slide-stat">
                 <div class="slide-label">Top Deadlines</div>
@@ -743,17 +743,12 @@ function generateDatesSlide(slide) {
 
 function generatePoliciesSlide(slide) {
     return `
-        <div class="slide-title">${slide.title}</div>
+        <div class="slide-title">Policies</div>
         <div class="slide-content">
             <div class="slide-stat">
                 <div class="slide-label">Total Policies</div>
                 <div class="slide-big-number">${slide.data.totalPolicies}</div>
                 <div class="slide-description">key policies to remember</div>
-            </div>
-            <div class="slide-stat">
-                <div class="slide-label">Late Policy</div>
-                <div class="slide-big-number">${slide.data.latePolicy.split(' ')[0]}%</div>
-                <div class="slide-description">deduction per day</div>
             </div>
             <div class="slide-stat">
                 <div class="slide-label">Critical Policies</div>
@@ -773,7 +768,7 @@ function generatePoliciesSlide(slide) {
 
 function generateStatsSlide(slide) {
     return `
-        <div class="slide-title">${slide.title}</div>
+        <div class="slide-title">Course Stats</div>
         <div class="slide-content">
             <div class="slide-stat">
                 <div class="slide-label">Total Credits</div>
@@ -784,18 +779,6 @@ function generateStatsSlide(slide) {
                 <div class="slide-label">Expected Workload</div>
                 <div class="slide-big-number">${slide.data.averageWorkload}</div>
                 <div class="slide-description">per week</div>
-            </div>
-            <div class="slide-stat">
-                <div class="slide-label">Course Stats</div>
-                <div class="ranking-list">
-                    ${slide.data.stats.slice(0, 3).map((stat, index) => `
-                        <div class="ranking-item">
-                            <div class="ranking-number">${index + 1}</div>
-                            <div class="ranking-text">${stat.name}</div>
-                            <div class="ranking-value">${stat.value} ${stat.unit}</div>
-                        </div>
-                    `).join('')}
-                </div>
             </div>
         </div>
     `;
@@ -816,41 +799,93 @@ function generateDefaultSlide(slide) {
 // Removed old card generation functions - now using slide generation
 
 function setupSlideshowNavigation() {
+    // Get navigation elements
+    const prevNav = document.getElementById('prevSlide');
+    const nextNav = document.getElementById('nextSlide');
+    const closeBtn = document.getElementById('closeModal');
+    
+    console.log('Setting up navigation:', { prevNav, nextNav, closeBtn });
+    
+    // Remove any existing event listeners by using onclick
+    if (prevNav) {
+        prevNav.onclick = () => {
+            console.log('Previous clicked');
+            navigateSlides(-1);
+        };
+    }
+    
+    if (nextNav) {
+        nextNav.onclick = () => {
+            console.log('Next clicked');
+            navigateSlides(1);
+        };
+    }
+    
+    if (closeBtn) {
+        closeBtn.onclick = closeSlideshowModal;
+    }
+    
+    // Add keyboard event listener for escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && slideshowModal.style.display === 'flex') {
+            closeSlideshowModal();
+        }
+    });
+    
     updateSlideshowNavigation();
 }
 
 function navigateSlides(direction) {
-    if (!currentClassData) return;
+    if (!currentClassData) {
+        console.log('No current class data');
+        return;
+    }
     
     const totalSlides = currentClassData.slides.length;
-    currentSlideIndex = (currentSlideIndex + direction + totalSlides) % totalSlides;
-    goToSlide(currentSlideIndex);
+    const newIndex = currentSlideIndex + direction;
+    
+    console.log(`Navigating: direction=${direction}, current=${currentSlideIndex}, new=${newIndex}, total=${totalSlides}`);
+    
+    if (newIndex >= 0 && newIndex < totalSlides) {
+        currentSlideIndex = newIndex;
+        goToSlide(currentSlideIndex);
+    } else if (newIndex < 0) {
+        // Go to last slide
+        currentSlideIndex = totalSlides - 1;
+        goToSlide(currentSlideIndex);
+    } else if (newIndex >= totalSlides) {
+        // Go to first slide
+        currentSlideIndex = 0;
+        goToSlide(currentSlideIndex);
+    }
 }
 
 function goToSlide(index) {
     if (!currentClassData) return;
     
     currentSlideIndex = index;
-    const slideWidth = slidesContainer.offsetWidth;
-    slidesContainer.scrollTo({
-        left: index * slideWidth,
-        behavior: 'smooth'
-    });
+    updateSlidesPosition();
     updateSlideshowNavigation();
+}
+
+function updateSlidesPosition() {
+    const slideWidth = slidesContainer.offsetWidth;
+    slidesContainer.style.transform = `translateX(-${currentSlideIndex * slideWidth}px)`;
 }
 
 function updateSlideshowNavigation() {
     if (!currentClassData) return;
     
-    // Update indicators
-    const indicators = document.querySelectorAll('.slide-indicator');
-    indicators.forEach((indicator, index) => {
-        indicator.classList.toggle('active', index === currentSlideIndex);
+    // Update progress segments
+    const progressSegments = document.querySelectorAll('.progress-segment');
+    progressSegments.forEach((segment, index) => {
+        segment.classList.remove('active', 'completed');
+        if (index < currentSlideIndex) {
+            segment.classList.add('completed');
+        } else if (index === currentSlideIndex) {
+            segment.classList.add('active');
+        }
     });
-    
-    // Update button states
-    prevSlide.disabled = currentSlideIndex === 0;
-    nextSlide.disabled = currentSlideIndex === currentClassData.slides.length - 1;
 }
 
 // Removed old card navigation functions - now using slideshow modal
