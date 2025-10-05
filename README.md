@@ -16,7 +16,8 @@ Inspired by **Spotify Wrapped**, we present your class information in an **engag
 ## 🚀 Features
 
 - 📚 Centralized view of all your syllabi  
-- 🎨 Spotify Wrapped–style interactive UI  
-- 🗓️ Displays key syllabus info: grades, deadlines, and test dates  
+- 🎨 Spotify Wrapped–style interactive UI
+- ✅ Displays key syllabus info: grades, deadlines, and test dates
+- 📅 Automatically adds important dates to your Google Calender
 - ⚡ Quick navigation between courses  
-- 💻 Built for college students, by college students  
+- 💻 Built for college students, by college students
